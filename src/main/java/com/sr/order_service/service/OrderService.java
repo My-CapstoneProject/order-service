@@ -1,6 +1,7 @@
 package com.sr.order_service.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,10 @@ public class OrderService {
 //        return productRepository.findByUserId(userId);
 //    }
 
+    public Optional<OrderEntity> getAOrder(int orderId) {
+		return orderRepository.findById(orderId);
+	}
+    
     public OrderEntity updateOrder(OrderEntity editorder) {
         return orderRepository.save(editorder);
     }

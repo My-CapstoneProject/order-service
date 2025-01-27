@@ -21,8 +21,19 @@ public class OrderPojo {
 
 	public LocalDate orderDate;
 
-	public String orderUserId;
+	public int orderUserId;
 
 	public int orderStoreId;
+	
+	private StorePojo storePojo;
+
+	public StorePojo getStorePojo() {
+	    return storePojo;
+	}
+
+	public void setStorePojo(StorePojo storePojo) {
+	    this.storePojo = storePojo;
+	}
+
 
 }
