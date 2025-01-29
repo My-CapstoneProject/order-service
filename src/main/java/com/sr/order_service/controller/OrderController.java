@@ -2,6 +2,7 @@ package com.sr.order_service.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +16,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.sr.order_service.entity.OrderEntity;
 import com.sr.order_service.pojo.OrderPojo;
 import com.sr.order_service.pojo.StorePojo;
+import com.sr.order_service.service.InventoryClient;
+import com.sr.order_service.service.OrderProductClient;
 import com.sr.order_service.service.OrderService;
+import com.sr.order_service.service.ProductClient;
 import com.sr.order_service.service.StoreClient;
-
+import com.sr.order_service.pojo.OrderProductPojo;
+import com.sr.order_service.pojo.ProductPojo;
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -29,6 +35,53 @@ public class OrderController {
 	 
 	 @Autowired
 	    StoreClient storeClient;
+	 
+	 @Autowired
+	    OrderProductClient orderProductClient;
+
+	 @Autowired
+	    ProductClient productClient;
+	 
+	 @Autowired
+	    InventoryClient inventoryClient;
+
+	    @GetMapping("/details/{orderId}")
+	    public ResponseEntity<OrderPojo> getOrderByIdWithDetails(@PathVariable int orderId) {
+	        try {
+	            // Fetch the order details
+	            OrderEntity orderEntity = orderService.getOrderById(orderId);
+
+	            if (orderEntity == null) {
+	                return ResponseEntity.notFound().build(); // 404 if order not found
+	            }
+
+	            // Create the OrderPojo
+	            OrderPojo orderPojo = new OrderPojo();
+	            orderPojo.setOrderId(orderEntity.getOrderId());
+	            orderPojo.setOrderStatus(orderEntity.getOrderStatus());
+	            orderPojo.setOrderDate(orderEntity.getOrderDate());
+	            orderPojo.setOrderStoreId(orderEntity.getOrderStoreId());
+	            orderPojo.setOrderUserId(orderEntity.getOrderUserId());
+
+	            // Fetch the order-product details for the given order
+	            List<OrderProductPojo> orderProductList = orderProductClient.getAllOrderProductsByOrderId(orderId);
+
+	            // Enhance the order-product list with product details
+	            List<OrderProductPojo> enhancedOrderProductList = orderProductList.stream().map(orderProduct -> {
+	                ProductPojo product = productClient.getProductById(orderProduct.getProductId());
+	                orderProduct.setProductPojo(product);
+	                return orderProduct;
+	            }).collect(Collectors.toList());
+
+	            // Attach the enhanced order-product list to the OrderPojo
+	            orderPojo.setOrderProducts(enhancedOrderProductList);
+
+	            return ResponseEntity.ok(orderPojo);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(500).body(null); // 500 in case of errors
+	        }
+	    }
 
 	    @PostMapping
 	    public ResponseEntity<OrderEntity> createOrder(@RequestBody OrderEntity order) {
@@ -47,6 +100,9 @@ public class OrderController {
 	        OrderEntity order = orderService.getOrderById(orderId);
 	        return ResponseEntity.ok(order);
 	    }
+	    
+	    
+	    
 
 	    // Get orders by User ID
 //	    @GetMapping("/order/{orderId}")
@@ -97,6 +153,25 @@ public class OrderController {
 		        return new ResponseEntity<>(HttpStatus.NOT_FOUND);  // Employee not found
 		    }
 		}
+	    
+	    @PostMapping("/send-to-inventory/{orderId}")
+	    public ResponseEntity<String> sendOrderProductsToInventory(@PathVariable int orderId) {
+	        try {
+	            // Fetch the order-product details for the given order
+	            List<OrderProductPojo> orderProductList = orderProductClient.getAllOrderProductsByOrderId(orderId);
+
+	            // Send the order-product list to the inventory microservice
+	            inventoryClient.updateSales(orderProductList);
+
+	            return ResponseEntity.ok("Order products sent to inventory and updated successfully.");
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(500).body("Failed to update inventory.");
+	        }
+	    }
+
+	    
+
 }
 
 
