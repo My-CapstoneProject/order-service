@@ -2,6 +2,8 @@ package com.sr.order_service.pojo;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,14 +13,14 @@ import lombok.NoArgsConstructor;
 @Data
 public class OrderProductPojo {
 	
-public int orderProductId;
+private int orderProductId;
 	
-	public int orderId;
+	private int orderId;
 
-	public int productId;
+	private int productId;
 
-	public int salesQuantity;
-	
+	private int salesQuantity;
+	@JsonIgnore
 	private ProductPojo productPojo;
 	
 	

@@ -159,6 +159,9 @@ public class OrderController {
 	        try {
 	            // Fetch the order-product details for the given order
 	            List<OrderProductPojo> orderProductList = orderProductClient.getAllOrderProductsByOrderId(orderId);
+	            System.out.println(orderProductList.toString());
+
+//	            System.out.println(orderProductList);
 
 	            // Send the order-product list to the inventory microservice
 	            inventoryClient.updateSales(orderProductList);
