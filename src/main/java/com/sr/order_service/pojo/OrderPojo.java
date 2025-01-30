@@ -1,6 +1,7 @@
 package com.sr.order_service.pojo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -27,13 +28,7 @@ public class OrderPojo {
 	
 	private StorePojo storePojo;
 
-	public StorePojo getStorePojo() {
-	    return storePojo;
-	}
-
-	public void setStorePojo(StorePojo storePojo) {
-	    this.storePojo = storePojo;
-	}
+	private List<OrderProductPojo> orderProducts;
 
 
 }
