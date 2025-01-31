@@ -44,6 +44,15 @@ public class OrderController {
 	 
 	 @Autowired
 	    InventoryClient inventoryClient;
+	 
+	 @PostMapping("/complete/{orderId}")
+	 public ResponseEntity<OrderEntity> completeOrder(@PathVariable int orderId) {
+	     OrderEntity order = orderService.getOrderById(orderId);
+	     order.setOrderStatus("COMPLETED");
+	     OrderEntity completedOrder = orderService.completeOrder(order);
+	     return ResponseEntity.ok(completedOrder);
+	 }
+
 
 	    @GetMapping("/details/{orderId}")
 	    public ResponseEntity<OrderPojo> getOrderByIdWithDetails(@PathVariable int orderId) {
