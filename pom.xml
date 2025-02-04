@@ -68,6 +68,20 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.33</version>
 		</dependency>
+<!-- <dependency>
+    <groupId>io.keen</groupId>
+    <artifactId>keen-client-java-core</artifactId>
+    <version>5.0.2</version>
+</dependency>-->
+
+
+
+
+
+
+
+		
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>
@@ -80,6 +94,9 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
+
+
 
 	<build>
 		<plugins>

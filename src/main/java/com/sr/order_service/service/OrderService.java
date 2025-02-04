@@ -1,6 +1,8 @@
 package com.sr.order_service.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,26 @@ import com.sr.order_service.entity.OrderEntity;
 public class OrderService {
 	@Autowired
     OrderRepo orderRepository;
+	
+	//  @Autowired
+	//     KeenService keenService;
+
+	    // public OrderEntity completeOrder(OrderEntity order) {
+	    //     OrderEntity savedOrder = orderRepository.save(order);
+
+	    //     // Log order details to Keen.io
+	    //     Map<String, Object> orderData = new HashMap<>();
+	    //     orderData.put("orderId", savedOrder.getOrderId());
+	    //     orderData.put("orderStatus", savedOrder.getOrderStatus());
+	    //     orderData.put("orderDate", savedOrder.getOrderDate());
+	    //     orderData.put("orderStoreId", savedOrder.getOrderStoreId());
+	    //     orderData.put("orderUserId", savedOrder.getOrderUserId());
+	    //     // orderData.put("totalAmount", savedOrder.getTotalAmount()); // Ensure OrderEntity has this field
+
+	    //     keenService.logEvent("orders", orderData);
+
+	    //     return savedOrder;
+	    // }
 	
     public OrderEntity addOrder(OrderEntity neworder) {
         return orderRepository.saveAndFlush(neworder);
