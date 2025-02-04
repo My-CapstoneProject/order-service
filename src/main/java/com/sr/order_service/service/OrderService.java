@@ -16,25 +16,25 @@ public class OrderService {
 	@Autowired
     OrderRepo orderRepository;
 	
-	 @Autowired
-	    KeenService keenService;
+	//  @Autowired
+	//     KeenService keenService;
 
-	    public OrderEntity completeOrder(OrderEntity order) {
-	        OrderEntity savedOrder = orderRepository.save(order);
+	    // public OrderEntity completeOrder(OrderEntity order) {
+	    //     OrderEntity savedOrder = orderRepository.save(order);
 
-	        // Log order details to Keen.io
-	        Map<String, Object> orderData = new HashMap<>();
-	        orderData.put("orderId", savedOrder.getOrderId());
-	        orderData.put("orderStatus", savedOrder.getOrderStatus());
-	        orderData.put("orderDate", savedOrder.getOrderDate());
-	        orderData.put("orderStoreId", savedOrder.getOrderStoreId());
-	        orderData.put("orderUserId", savedOrder.getOrderUserId());
-	        orderData.put("totalAmount", savedOrder.getTotalAmount()); // Ensure OrderEntity has this field
+	    //     // Log order details to Keen.io
+	    //     Map<String, Object> orderData = new HashMap<>();
+	    //     orderData.put("orderId", savedOrder.getOrderId());
+	    //     orderData.put("orderStatus", savedOrder.getOrderStatus());
+	    //     orderData.put("orderDate", savedOrder.getOrderDate());
+	    //     orderData.put("orderStoreId", savedOrder.getOrderStoreId());
+	    //     orderData.put("orderUserId", savedOrder.getOrderUserId());
+	    //     // orderData.put("totalAmount", savedOrder.getTotalAmount()); // Ensure OrderEntity has this field
 
-	        keenService.logEvent("orders", orderData);
+	    //     keenService.logEvent("orders", orderData);
 
-	        return savedOrder;
-	    }
+	    //     return savedOrder;
+	    // }
 	
     public OrderEntity addOrder(OrderEntity neworder) {
         return orderRepository.saveAndFlush(neworder);
